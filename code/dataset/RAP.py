@@ -6,7 +6,7 @@ from torch.utils import data
 
 
 class RAP(data.Dataset):
-    def __init__(self, root='/home/yjz/dataset/RAP'):
+    def __init__(self, root='dataset/RAP'):
         self.root = root
         self.classes_num = 51
         self.save_path_partion = self.root

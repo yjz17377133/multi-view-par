@@ -58,7 +58,6 @@ class KeyHeatModule_test2(nn.Module):
             
             x_mask = x1 * x2
             x_mask = x_mask.reshape((-1, 1, self.width))
-            #print('yjz_debug', x_mask)
             y1 = x[i, :, 1].clone()
             y1[:, :max(torch.min(keypoint[i, :, 1])-1, 0)] = 0
             y1 = y1 / (y1.sum(-1).unsqueeze(-1))
@@ -103,7 +102,6 @@ class KeyHeatModule_test2(nn.Module):
         if self.group_num['head'] != 0:
             head_vec = self.head_emb(embedding)
             head_vec = torch.reshape(head_vec, shape=(bs, -1, 2, self.width))
-            #head_vec = self.softmax(head_vec)
             head_map = self.gen_map_test(head_vec, head_point).view((bs, -1, 1, self.width, self.height))
         else:
             head_map = None
@@ -111,7 +109,6 @@ class KeyHeatModule_test2(nn.Module):
         if self.group_num['arm'] != 0:
             arm_vec = self.arm_emb(embedding)
             arm_vec = torch.reshape(arm_vec, shape=(bs, -1, 2, self.width))
-            #arm_vec = self.softmax(arm_vec)
             arm_map = self.gen_map_test(arm_vec, arm_point).view((bs, -1, 1, self.width, self.height))
         else:
             arm_map = None
@@ -119,7 +116,6 @@ class KeyHeatModule_test2(nn.Module):
         if self.group_num['upper'] != 0:
             upper_vec = self.upper_emb(embedding)
             upper_vec = torch.reshape(upper_vec, shape=(bs, -1, 2, self.width))
-            #upper_vec = self.softmax(upper_vec)
             upper_map = self.gen_map_test(upper_vec, upper_point).view((bs, -1, 1, self.width, self.height))
         else:
             upper_map = None
@@ -127,7 +123,6 @@ class KeyHeatModule_test2(nn.Module):
         if self.group_num['foot'] != 0:
             foot_vec = self.foot_emb(embedding)
             foot_vec = torch.reshape(foot_vec, shape=(bs, -1, 2, self.width))
-            #foot_vec = self.softmax(foot_vec)
             foot_map = self.gen_map_test(foot_vec, foot_point).view((bs, -1, 1, self.width, self.height))
         else:
             foot_map = None
@@ -135,7 +130,6 @@ class KeyHeatModule_test2(nn.Module):
         if self.group_num['lower'] != 0:
             lower_vec = self.lower_emb(embedding)
             lower_vec = torch.reshape(lower_vec, shape=(bs, -1, 2, self.width))
-            #lower_vec = self.softmax(lower_vec)
             lower_map = self.gen_map_test(lower_vec, lower_point).view((bs, -1, 1, self.width, self.height))
         else:
             lower_map = None
@@ -224,8 +218,6 @@ class CoordConv2d_test(conv.Conv2d):
         self.addcoords = AddCoords_test(num_classes)
         self.conv = nn.Conv2d(in_channels + num_classes, out_channels,
                               kernel_size, stride, padding, dilation, groups, bias)
-        #self.conv = nn.Conv2d(in_channels + 17*3+2, out_channels,
-        #                      kernel_size, stride, padding, dilation, groups, bias)
 
     def forward(self, input_tensor, keypoints):
         out = self.addcoords(input_tensor, keypoints)
